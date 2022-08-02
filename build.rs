@@ -23,6 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     builder.compile("lfs-sys");
 
+    
     let bindings = bindgen::Builder::default()
         .header("littlefs/lfs.h")
         .clang_arg(format!("--target={}", target))
