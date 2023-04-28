@@ -7,7 +7,11 @@
 
 #include <string.h>
 
-size_t strspn(const char *s, const char *accept)
+#ifndef __weak
+#  define __weak __attribute__((weak))
+#endif /* __weak */
+
+__weak size_t strspn(const char *s, const char *accept)
 {
 	const char *p;
 	const char *a;
@@ -25,7 +29,7 @@ size_t strspn(const char *s, const char *accept)
 	return count;
 }
 
-size_t strcspn(const char *s, const char *reject)
+__weak size_t strcspn(const char *s, const char *reject)
 {
 	const char *p;
 	const char *r;
@@ -41,7 +45,7 @@ size_t strcspn(const char *s, const char *reject)
 	return count;
 }
 
-size_t strlen(const char *s)
+__weak size_t strlen(const char *s)
 {
 	const char *sc;
 
@@ -50,7 +54,7 @@ size_t strlen(const char *s)
 	return sc - s;
 }
 
-char *strchr(const char *s, int c)
+__weak char *strchr(const char *s, int c)
 {
 	for (; *s != (char)c; ++s)
 		if (*s == '\0')
