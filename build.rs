@@ -1,6 +1,8 @@
 use std::env;
 use std::path::PathBuf;
 
+use bindgen::Formatter;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut builder = cc::Build::new();
     let target = env::var("TARGET")?;
@@ -12,8 +14,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .flag("-DLFS_NO_ERROR")
         .file("littlefs/lfs.c")
         .file("littlefs/lfs_util.c")
-        .file("string.c")
-    ;
+        .file("string.c");
 
     #[cfg(not(feature = "assertions"))]
     let builder = builder.flag("-DLFS_NO_ASSERT");
@@ -23,13 +24,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     builder.compile("lfs-sys");
 
-    
     let bindings = bindgen::Builder::default()
         .header("littlefs/lfs.h")
         .clang_arg(format!("--target={}", target))
         .use_core()
         .ctypes_prefix("cty")
-        .rustfmt_bindings(true)
+        .formatter(Formatter::Rustfmt)
         .generate()
         .expect("Unable to generate bindings");
 
