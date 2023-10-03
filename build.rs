@@ -3,7 +3,6 @@ use std::path::PathBuf;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut builder = cc::Build::new();
-    let target = env::var("TARGET")?;
     let builder = builder
         .flag("-std=c11")
         .flag("-DLFS_NO_MALLOC")
@@ -26,10 +25,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     let bindings = bindgen::Builder::default()
         .header("littlefs/lfs.h")
-        .clang_arg(format!("--target={}", target))
         .use_core()
         .ctypes_prefix("cty")
         .rustfmt_bindings(true)
+        .clang_arg("-v")
+        .clang_arg("-IC:\\Program Files (x86)\\Arm GNU Toolchain arm-none-eabi\\11.2 2022.02\\arm-none-eabi\\include")
+        .detect_include_paths(true)
         .generate()
         .expect("Unable to generate bindings");
 
